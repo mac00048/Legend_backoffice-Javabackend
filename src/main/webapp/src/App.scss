@@ -1,0 +1,88 @@
+@import '../node_modules/bulma/bulma.sass';
+@import '../node_modules/mapbox-gl/dist/mapbox-gl.css';
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap');
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+}
+
+// footer fixed on bottom
+#root {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    
+    & > section {
+        flex: 1;
+    }
+}
+
+span.is-size-4, span.is-size-5 {
+    font-weight: 400;
+}
+
+table.is-hoverable tbody td {
+    cursor: pointer;
+}
+
+div.back-to-top {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+
+    .button.is-rounded {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+}
+
+//
+// helpers
+//
+
+.is-fit {
+    width: 1%;
+}
+
+.is-nowrap {
+    white-space: nowrap;
+}
+
+.ellipsis {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+div.DraftEditor-editorContainer, div.reset {
+    h1 {
+        font-size: 2em;
+        margin-block-start: 0.67em;
+        margin-block-end: 0.67em;
+        font-weight: bold;
+    }
+
+    h2 {
+        font-size: 1.5em;
+        margin-block-start: 0.83em;
+        margin-block-end: 0.83em;
+        font-weight: bold;
+    }
+
+    h3 {
+        font-size: 1.17em;
+        margin-block-start: 1em;
+        margin-block-end: 1em;
+        font-weight: bold;
+    }
+
+    ul, ol {
+        margin-left: 2em;
+    }
+}

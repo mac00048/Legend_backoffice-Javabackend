@@ -1,0 +1,7 @@
+node_modules
+src/main/resources/assets
+target
+.settings
+.classpath
+.project
+.vscode
