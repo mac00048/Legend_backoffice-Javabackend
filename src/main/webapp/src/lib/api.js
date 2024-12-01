@@ -49,12 +49,15 @@ export const user = {
     post(user.endpoint, data).then(authorize).then(verify).then(parseJson),
 
   // Update an existing user
-  edit: (id, data) =>
-    put(`${user.endpoint}/${id}`, data)
+  edit: (id, data) => {
+    if (!id) throw new Error("User ID is required for editing");
+    console.log("aaaaasd");
+    // validateUserData(data);
+    return put(`${user.endpoint}/${id}`, data)
       .then(authorize)
       .then(verify)
-      .then(parseJson),
-
+      .then(parseJson);
+  },
   // Delete a user
   remove: (id) => deleTe(`${user.endpoint}/${id}`).then(authorize).then(verify),
 };

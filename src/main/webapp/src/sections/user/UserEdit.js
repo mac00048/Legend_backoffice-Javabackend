@@ -1,7 +1,5 @@
 import React, { Component } from "react";
-import { activity } from "../../lib/api";
-import ImageEditor from "../common/ImageEditor";
-import RichEditor from "../common/RichEditor";
+import { user } from "../../lib/api";
 import NavigationBlocker from "../common/NavigationBlocker";
 
 class UserEdit extends Component {
@@ -10,10 +8,16 @@ class UserEdit extends Component {
 
     this.state = {
       id: this.props.match.params.id,
-      form: null,
+      form: {
+        name: "",
+        email: "",
+        password: "",
+        phone: "",
+        role: "User",
+      },
       init: false,
       blocking: true,
-      error: false,
+      error: null,
     };
 
     this.onChange = this.onChange.bind(this);
@@ -22,39 +26,37 @@ class UserEdit extends Component {
   }
 
   componentDidMount() {
-    activity
+    user
       .get(this.state.id)
-      .then((json) =>
+      .then((json) => {
         this.setState({
           id: json.id,
           form: {
-            title: json.title,
-            subtitle: json.subtitle,
-            description: json.description,
-            images: json.images.map((image) => {
-              return { fileId: image.fileId, title: image.title };
-            }),
+            name: json.name,
+            email: json.email,
+            password: "",
+            phone: json.phone,
+            role: json.role,
           },
           init: true,
-        })
-      )
-      .catch((error) =>
+        });
+      })
+      .catch((error) => {
+        console.error("Error fetching user:", error);
         this.setState({
-          data: null,
-        })
-      );
+          error: "Failed to load user data.",
+        });
+      });
   }
 
   onChange(name, value) {
-    this.setState((prevState) => {
-      return {
-        form: {
-          ...prevState.form,
-          [name]: value,
-        },
-        error: false,
-      };
-    });
+    this.setState((prevState) => ({
+      form: {
+        ...prevState.form,
+        [name]: value,
+      },
+      error: false,
+    }));
   }
 
   onFormChange(event) {
@@ -63,69 +65,109 @@ class UserEdit extends Component {
     this.onChange(name, value);
   }
 
-  onImagesChange(images) {
-    this.setState((prevState) => {
-      return {
-        form: {
-          ...prevState.form,
-          images: images,
-        },
-        error: false,
-      };
-    });
-  }
-
   onFormSubmit(event) {
     event.preventDefault();
 
-    activity
+    if (!this.state.form.name || !this.state.form.email) {
+      this.setState({ error: "Name and Email are required." });
+      return;
+    }
+
+    console.log("Submitting form with data:", this.state.form);
+
+    user
       .edit(this.state.id, this.state.form)
-      .then((json) => {
-        this.setState({ blocking: false }, () =>
-          this.props.history.push(`/activity/${this.state.id}`)
-        );
+      .then(() => {
+        console.log("User updated successfully!");
+        this.setState({ blocking: false }, () => {
+          console.log("Navigating to /user...");
+          this.props.history.push("/user");
+        });
       })
       .catch((error) => {
+        console.error("Error saving user:", error);
         this.setState({
-          error: true,
+          error: "Failed to save user data.",
         });
       });
   }
 
   render() {
     if (!this.state.init) {
-      return null;
+      return <div>Loading...</div>;
     }
 
     return (
       <section className="section">
         <div className="container">
-          <h1 className="title">Edit Activity</h1>
-
+          <h1 className="name">Edit User</h1>
+          {this.state.error && (
+            <div className="notification is-danger">{this.state.error}</div>
+          )}
           <form name="contact" method="POST" onSubmit={this.onFormSubmit}>
             <div className="field">
-              <label className="label">Title</label>
+              <label className="name">Name</label>
               <div className="control">
                 <input
-                  name="title"
+                  name="name"
                   className="input"
                   type="text"
                   required
-                  value={this.state.form.title}
+                  value={this.state.form.name}
                   onChange={this.onFormChange}
                 />
               </div>
             </div>
             <div className="field">
-              <label className="label">Subtitle</label>
+              <label className="email">Email</label>
               <div className="control">
                 <input
-                  name="subtitle"
+                  name="email"
                   className="input"
-                  type="text"
-                  value={this.state.form.subtitle}
+                  type="email"
+                  required
+                  value={this.state.form.email}
                   onChange={this.onFormChange}
                 />
+              </div>
+            </div>
+            <div className="field">
+              <label className="label">Password</label>
+              <div className="control">
+                <input
+                  name="password"
+                  className="input"
+                  type="password"
+                  value={this.state.form.password}
+                  onChange={this.onFormChange}
+                />
+              </div>
+            </div>
+            <div className="field">
+              <label className="label">Phone</label>
+              <div className="control">
+                <input
+                  name="phone"
+                  className="input"
+                  type="text"
+                  value={this.state.form.phone}
+                  onChange={this.onFormChange}
+                />
+              </div>
+            </div>
+            <div className="field">
+              <label className="label">Role</label>
+              <div className="control">
+                <div className="select is-fullwidth">
+                  <select
+                    name="role"
+                    value={this.state.form.role || "User"}
+                    onChange={this.onFormChange}
+                  >
+                    <option value="Admin">Admin</option>
+                    <option value="User">User</option>
+                  </select>
+                </div>
               </div>
             </div>
             <div className="field is-grouped">
@@ -138,7 +180,7 @@ class UserEdit extends Component {
                 <button
                   type="button"
                   className="button is-light"
-                  onClick={() => this.props.history.push("/activity")}
+                  onClick={() => this.props.history.push("/user")}
                 >
                   Cancel
                 </button>

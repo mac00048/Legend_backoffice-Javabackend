@@ -21,14 +21,45 @@ class UserList extends Component {
       orderBy: "name",
       order: "ASC",
       data: [],
+      selectedForDelete: null,
     };
 
     this.onQueryChange = this.onQueryChange.bind(this);
     this.debouncedSearch = debounce(this.search.bind(this), 500);
+    this.onDelete = this.onDelete.bind(this);
   }
 
   componentDidMount() {
     this.search();
+  }
+
+  onDelete(event, id) {
+    event.preventDefault();
+
+    if (this.state.selectedForDelete !== id) {
+      this.setState({
+        selectedForDelete: id,
+      });
+      return;
+    }
+
+    // Proceed with deletion
+    user
+      .remove(id)
+      .then(() => {
+        // Refresh data after deletion
+        this.setState({
+          selectedForDelete: null, // Reset delete confirmation
+          data: this.state.data.filter((item) => item.id !== id), // Remove deleted item from list
+        });
+      })
+      .catch((error) => {
+        console.error("Error deleting user:", error);
+        this.setState({
+          selectedForDelete: null, // Reset delete confirmation
+          error: true,
+        });
+      });
   }
 
   onQueryChange(event) {
@@ -69,7 +100,7 @@ class UserList extends Component {
     }, this.search);
   }
 
-  onActivityClick(id) {
+  onEditClick(id) {
     this.props.history.push(`/user/${id}/edit`);
   }
 
@@ -103,10 +134,10 @@ class UserList extends Component {
                   <th
                     className="is-nowrap is-unselectable"
                     style={{ cursor: "pointer" }}
-                    onClick={() => this.onColumnClick("title")}
+                    onClick={() => this.onColumnClick("name")}
                   >
                     Name
-                    {this.state.orderBy === "title" && (
+                    {this.state.orderBy === "name" && (
                       <span
                         className=""
                         style={{
@@ -122,7 +153,7 @@ class UserList extends Component {
                         )}
                       </span>
                     )}
-                    {this.state.orderBy !== "title" && (
+                    {this.state.orderBy !== "name" && (
                       <span
                         className=""
                         style={{
@@ -138,10 +169,10 @@ class UserList extends Component {
                   <th
                     className="is-nowrap is-unselectable is-hidden-mobile"
                     style={{ cursor: "pointer" }}
-                    onClick={() => this.onColumnClick("subtitle")}
+                    onClick={() => this.onColumnClick("email")}
                   >
                     Email
-                    {this.state.orderBy === "subtitle" && (
+                    {this.state.orderBy === "email" && (
                       <span
                         className=""
                         style={{
@@ -157,7 +188,7 @@ class UserList extends Component {
                         )}
                       </span>
                     )}
-                    {this.state.orderBy !== "subtitle" && (
+                    {this.state.orderBy !== "email" && (
                       <span
                         className=""
                         style={{
@@ -170,13 +201,13 @@ class UserList extends Component {
                       </span>
                     )}
                   </th>
-                  {/* <th
+                  <th
                     className="is-nowrap is-unselectable is-hidden-mobile"
                     style={{ cursor: "pointer" }}
-                    onClick={() => this.onColumnClick("created_at")}
+                    onClick={() => this.onColumnClick("role")}
                   >
-                    Creation Date
-                    {this.state.orderBy === "created_at" && (
+                    Role
+                    {this.state.orderBy === "role" && (
                       <span
                         className=""
                         style={{
@@ -192,7 +223,7 @@ class UserList extends Component {
                         )}
                       </span>
                     )}
-                    {this.state.orderBy !== "created_at" && (
+                    {this.state.orderBy !== "role" && (
                       <span
                         className=""
                         style={{
@@ -204,32 +235,41 @@ class UserList extends Component {
                         <FaSort />
                       </span>
                     )}
-                  </th> */}
-                  <th className="is-nowrap"></th>
+                  </th>
+                  <th className="is-nowrap has-text-right">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {this.state.data.map((item) => (
-                  <tr
-                    key={item.id}
-                    onClick={() => this.onActivityClick(item.id)}
-                  >
-                    <td className="is-nowrap">{item.email}</td>
-                    {/* <td className="is-nowrap is-hidden-mobile">
-                      {item.subtitle}
-                    </td>
-                    <td className="is-nowrap is-hidden-mobile">
-                      {format(
-                        parseISO(item.createdAt),
-                        "yyyy-MM-dd HH:mm:ss xxx"
-                      )}
-                    </td> */}
+                  <tr key={item.id}>
+                    <td className="is-nowrap">{item.name}</td>
+                    <td className="is-nowrap is-hidden-mobile">{item.email}</td>
+                    <td className="is-nowrap is-hidden-mobile">{item.role}</td>
                     <td className="is-fit is-nowrap has-text-right">
-                      <a className="has-text-grey">
-                        <span className="icon">
-                          <FaAngleRight />
+                      <button
+                        className="button is-small is-info"
+                        onClick={() =>
+                          this.props.history.push(`/user/${item.id}/edit`)
+                        }
+                        style={{ marginRight: "5px" }}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className={
+                          "button is-small " +
+                          (this.state.selectedForDelete === item.id
+                            ? "is-danger"
+                            : "is-danger is-light")
+                        }
+                        onClick={(event) => this.onDelete(event, item.id)}
+                      >
+                        <span>
+                          {this.state.selectedForDelete === item.id
+                            ? "Are you sure?"
+                            : "Delete"}
                         </span>
-                      </a>
+                      </button>
                     </td>
                   </tr>
                 ))}
