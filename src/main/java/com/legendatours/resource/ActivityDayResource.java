@@ -207,8 +207,6 @@ public class ActivityDayResource {
                     routes.add(points);
                 });
             } catch (IOException e) {
-                // TODO Auto-generated catch block
-                // e.printStackTrace();
             }
         }
 

@@ -46,6 +46,11 @@ public class RedeemResource {
         this.jdbi = jdbi;
     }
 
+    /**
+     * @param code
+     * @param session
+     * @return
+     */
     @GET
     @Path("/{code}")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
@@ -87,8 +92,6 @@ public class RedeemResource {
                 .header("Content-Length", zip.length)
                 .build();
         } catch (final IOException ex) {
-            // TODO different error
-            // ex.printStackTrace();
             return Response.status(Status.NOT_FOUND).build();
         }
     }

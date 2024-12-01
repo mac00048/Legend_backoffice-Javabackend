@@ -83,7 +83,7 @@ public class UserResource {
                     .entity(wrappedUser)
                     .build();
         } catch (Exception e) {
-            e.printStackTrace();
+            // e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("An error occurred while adding the user.")
                     .build();
@@ -150,16 +150,13 @@ public class UserResource {
             return Response.noContent().build();
         } catch (Exception e) {
             // Log the exception and return a 500 status
-            e.printStackTrace();
+            // e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("An error occurred while deleting the user.")
                     .build();
         }
     }
     
-    // Remove the unnecessary `wrapDeleted` method
-    
-
     //
     // Helpers
     //
@@ -180,16 +177,16 @@ private User wrapCreate(final User user) {
     );
 }
 
-    private User wrapUpdate(final User oldUser, final User update) {
+    // private User wrapUpdate(final User oldUser, final User update) {
 
-        return new User(
-                oldUser.getId(),
-                update.getName(),
-                update.getEmail(),
-                update.getPhone(),
-                update.getPassword(),
-                update.getRole());
-    }
+    //     return new User(
+    //             oldUser.getId(),
+    //             update.getName(),
+    //             update.getEmail(),
+    //             update.getPhone(),
+    //             update.getPassword(),
+    //             update.getRole());
+    // }
 
     // private User wrapDeleted(final User user) {
 
