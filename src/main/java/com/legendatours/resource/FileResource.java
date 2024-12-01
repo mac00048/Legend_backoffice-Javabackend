@@ -1,5 +1,9 @@
 package com.legendatours.resource;
 
+import java.awt.AlphaComposite;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,20 +22,16 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import java.awt.AlphaComposite;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
-
-import com.codahale.metrics.annotation.Timed;
-import com.legendatours.beans.File;
-import com.legendatours.dao.FileDao;
 
 import org.apache.commons.io.IOUtils;
 import org.glassfish.jersey.media.multipart.ContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.jdbi.v3.core.Jdbi;
+
+import com.codahale.metrics.annotation.Timed;
+import com.legendatours.beans.File;
+import com.legendatours.dao.FileDao;
 
 import io.dropwizard.jersey.sessions.Session;
 
@@ -110,7 +110,7 @@ public class FileResource {
                     .build();
             } catch (final IOException e) {
                 // TODO handle this
-                e.printStackTrace();
+                // e.printStackTrace();
                 return Response.status(Status.INTERNAL_SERVER_ERROR).build();
             }
         }
@@ -131,7 +131,7 @@ public class FileResource {
         try {
             bytes = IOUtils.toByteArray(stream);
         } catch (IOException e) {
-            e.printStackTrace();
+            // e.printStackTrace();
             return Response.status(Status.NOT_FOUND).build();
         }
 

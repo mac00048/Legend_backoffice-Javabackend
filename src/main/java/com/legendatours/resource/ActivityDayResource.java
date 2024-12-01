@@ -25,6 +25,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.jdbi.v3.core.Jdbi;
+
 import com.codahale.metrics.annotation.Timed;
 import com.legendatours.beans.ActivityDay;
 import com.legendatours.beans.Coordinate;
@@ -35,8 +37,6 @@ import com.legendatours.beans.MarkerType;
 import com.legendatours.beans.Track;
 import com.legendatours.dao.ActivityDayDao;
 import com.legendatours.dao.FileDao;
-
-import org.jdbi.v3.core.Jdbi;
 
 import io.dropwizard.jersey.sessions.Session;
 import io.jenetics.jpx.GPX;
@@ -208,7 +208,7 @@ public class ActivityDayResource {
                 });
             } catch (IOException e) {
                 // TODO Auto-generated catch block
-                e.printStackTrace();
+                // e.printStackTrace();
             }
         }
 
@@ -266,7 +266,7 @@ public class ActivityDayResource {
                     height = img.getHeight();
                 } catch (final IOException e) {
                     // TODO handle this
-                    e.printStackTrace();
+                    // e.printStackTrace();
                     width = height = 0;
                 }
 

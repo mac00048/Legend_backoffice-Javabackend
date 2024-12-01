@@ -19,6 +19,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.jdbi.v3.core.Jdbi;
+
 import com.codahale.metrics.annotation.Timed;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.legendatours.beans.Activity;
@@ -31,8 +33,6 @@ import com.legendatours.dao.ActivityDao;
 import com.legendatours.dao.ActivityDayDao;
 import com.legendatours.dao.FileDao;
 import com.legendatours.dao.VoucherDao;
-
-import org.jdbi.v3.core.Jdbi;
 
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.jersey.sessions.Session;
@@ -88,7 +88,7 @@ public class RedeemResource {
                 .build();
         } catch (final IOException ex) {
             // TODO different error
-            ex.printStackTrace();
+            // ex.printStackTrace();
             return Response.status(Status.NOT_FOUND).build();
         }
     }

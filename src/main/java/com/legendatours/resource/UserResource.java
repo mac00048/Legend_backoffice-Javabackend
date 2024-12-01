@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -98,39 +97,39 @@ public class UserResource {
     // Helpers
     //
 
-    private User wrapCreate(final User user, final HttpSession session) {
-        final UUID id = UUID.randomUUID();
+    // private User wrapCreate(final User user, final HttpSession session) {
+    //     final UUID id = UUID.randomUUID();
 
-        return new User(
-                id,
-                user.getName(),
-                user.getEmail(),
-                user.getPhone(),
-                user.getPassword(),
-                user.getRole());
-    }
+    //     return new User(
+    //             id,
+    //             user.getName(),
+    //             user.getEmail(),
+    //             user.getPhone(),
+    //             user.getPassword(),
+    //             user.getRole());
+    // }
 
-    private User wrapUpdate(final User oldUser, final User update, final HttpSession session) {
+    // private User wrapUpdate(final User oldUser, final User update, final HttpSession session) {
 
-        return new User(
-                oldUser.getId(),
-                update.getName(),
-                update.getEmail(),
-                update.getPhone(),
-                update.getPassword(),
-                update.getRole());
-    }
+    //     return new User(
+    //             oldUser.getId(),
+    //             update.getName(),
+    //             update.getEmail(),
+    //             update.getPhone(),
+    //             update.getPassword(),
+    //             update.getRole());
+    // }
 
-    private User wrapDeleted(final User user, final HttpSession session) {
+    // private User wrapDeleted(final User user, final HttpSession session) {
 
-        return new User(
-                user.getId(),
-                user.getName(),
-                user.getEmail(),
-                user.getPhone(),
-                user.getPassword(),
-                user.getRole());
-    }
+    //     return new User(
+    //             user.getId(),
+    //             user.getName(),
+    //             user.getEmail(),
+    //             user.getPhone(),
+    //             user.getPassword(),
+    //             user.getRole());
+    // }
 
     private List<User> wrapMeta(final List<User> users) {
         return users.stream()

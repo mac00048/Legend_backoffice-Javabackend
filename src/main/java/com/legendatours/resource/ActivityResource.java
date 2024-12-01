@@ -183,7 +183,7 @@ public class ActivityResource {
                     height = img.getHeight();
                 } catch (final IOException e) {
                     // TODO handle this
-                    e.printStackTrace();
+                    // e.printStackTrace();
                     width = height = 0;
                 }
 
