@@ -86,7 +86,6 @@ public class FileResource {
             return Response.status(Status.NOT_FOUND).build();
         }
 
-        // only images may be resized
         if (file.getType().startsWith("image")) {
             try {
                 final BufferedImage image = ImageIO.read(new ByteArrayInputStream(file.getContent()));
@@ -109,8 +108,7 @@ public class FileResource {
                     // .header("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"")
                     .build();
             } catch (final IOException e) {
-                // TODO handle this
-                // e.printStackTrace();
+
                 return Response.status(Status.INTERNAL_SERVER_ERROR).build();
             }
         }
@@ -131,7 +129,6 @@ public class FileResource {
         try {
             bytes = IOUtils.toByteArray(stream);
         } catch (IOException e) {
-            // e.printStackTrace();
             return Response.status(Status.NOT_FOUND).build();
         }
 

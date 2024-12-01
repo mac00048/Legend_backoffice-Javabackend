@@ -72,18 +72,13 @@ public class UserResource {
         }
     
         try {
-            // Wrap the user object and hash the password
             final User wrappedUser = wrapCreate(user);
-    
-            // Insert the wrapped user into the database
             jdbi.onDemand(UserDao.class).insert(wrappedUser);
     
-            // Return the created user
             return Response.status(Response.Status.CREATED)
                     .entity(wrappedUser)
                     .build();
         } catch (Exception e) {
-            // e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("An error occurred while adding the user.")
                     .build();
@@ -96,20 +91,16 @@ public class UserResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") final UUID id, final User user) {
         System.out.println("PUT request received for user: " + id);
-    
-        // Fetch the existing user
         User existingUser = jdbi.onDemand(UserDao.class).get(id);
     
         if (existingUser == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-    
-        // Determine the password to save (hash new password if provided)
+
         String passwordToSave = (user.getPassword() != null && !user.getPassword().isEmpty())
-                ? BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()) // Hash the new password
-                : existingUser.getPassword(); // Retain existing hashed password
+                ? BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()) 
+                : existingUser.getPassword(); 
     
-        // Create the updated User object
         User updatedUser = new User(
                 id,
                 user.getName() != null ? user.getName() : existingUser.getName(),
@@ -119,10 +110,8 @@ public class UserResource {
                 user.getRole() != null ? user.getRole() : existingUser.getRole()
         );
     
-        // Update the user in the database
         jdbi.onDemand(UserDao.class).update(updatedUser);
     
-        // Return the updated user
         return Response.ok(updatedUser).build();
     }
     
@@ -132,25 +121,18 @@ public class UserResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response remove(@PathParam("id") final UUID id) {
-        // Fetch the user from the database
         final User user = jdbi.onDemand(UserDao.class).get(id);
     
         if (user == null) {
-            // Return 404 if the user is not found
             return Response.status(Response.Status.NOT_FOUND)
                     .entity("User not found")
                     .build();
         }
     
         try {
-            // Perform the deletion (soft delete or hard delete)
             jdbi.onDemand(UserDao.class).delete(id);
-    
-            // Return a success response
             return Response.noContent().build();
         } catch (Exception e) {
-            // Log the exception and return a 500 status
-            // e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("An error occurred while deleting the user.")
                     .build();
@@ -163,8 +145,6 @@ public class UserResource {
 
 private User wrapCreate(final User user) {
     final UUID id = UUID.randomUUID();
-
-    // Hash the password
     String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
 
     return new User(
@@ -172,8 +152,8 @@ private User wrapCreate(final User user) {
             user.getName(),
             user.getEmail(),
             user.getPhone(),
-            hashedPassword, // Store the hashed password
-            user.getRole() != null ? user.getRole() : "User" // Default role if not provided
+            hashedPassword, 
+            user.getRole() != null ? user.getRole() : "User" 
     );
 }
 

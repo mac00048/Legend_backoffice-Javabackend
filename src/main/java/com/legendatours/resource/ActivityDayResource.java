@@ -212,12 +212,10 @@ public class ActivityDayResource {
 
         final List<Marker> markers = new ArrayList<>();;
 
-        // preserve existing markers
         if (activityDay.getMarkers() != null) {
             markers.addAll(activityDay.getMarkers());
         }
 
-        // add default markers
         if (createMarkers) {
             for (final List<Coordinate> path : routes) {
                 if (path.isEmpty()) {
@@ -263,8 +261,6 @@ public class ActivityDayResource {
                     width = img.getWidth();
                     height = img.getHeight();
                 } catch (final IOException e) {
-                    // TODO handle this
-                    // e.printStackTrace();
                     width = height = 0;
                 }
 

@@ -114,7 +114,6 @@ public class ActivityResource {
         return Response.noContent().build();
     }
 
-
     //
     // Helpers
     //
@@ -182,8 +181,6 @@ public class ActivityResource {
                     width = img.getWidth();
                     height = img.getHeight();
                 } catch (final IOException e) {
-                    // TODO handle this
-                    // e.printStackTrace();
                     width = height = 0;
                 }
 
