@@ -4,6 +4,12 @@ import java.util.EnumSet;
 
 import javax.servlet.DispatcherType;
 
+import org.eclipse.jetty.server.session.SessionHandler;
+import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
+import org.jdbi.v3.core.Jdbi;
+import org.jdbi.v3.jackson2.Jackson2Plugin;
+import org.jdbi.v3.sqlobject.SqlObjectPlugin;
+
 import com.legendatours.filter.AuthenticationFilter;
 import com.legendatours.filter.SpaFilter;
 import com.legendatours.resource.ActivityDayResource;
@@ -11,13 +17,8 @@ import com.legendatours.resource.ActivityResource;
 import com.legendatours.resource.FileResource;
 import com.legendatours.resource.RedeemResource;
 import com.legendatours.resource.SessionResource;
+import com.legendatours.resource.UserResource;
 import com.legendatours.resource.VoucherResource;
-
-import org.eclipse.jetty.server.session.SessionHandler;
-import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
-import org.jdbi.v3.core.Jdbi;
-import org.jdbi.v3.jackson2.Jackson2Plugin;
-import org.jdbi.v3.sqlobject.SqlObjectPlugin;
 
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
@@ -68,6 +69,7 @@ public class MainApplication extends Application<MainConfiguration> {
         environment.jersey().register(new FileResource(jdbi));
         environment.jersey().register(new VoucherResource(jdbi));
         environment.jersey().register(new RedeemResource(jdbi));
+        environment.jersey().register(new UserResource(jdbi));
         environment.jersey().setUrlPattern("/api/*");
     }
 }

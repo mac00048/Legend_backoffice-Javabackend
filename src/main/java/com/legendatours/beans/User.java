@@ -3,22 +3,24 @@ package com.legendatours.beans;
 import java.util.UUID;
 
 public class User {
-    private final UUID id;
+    private UUID id;
     private final String name;
     private final String email;
     private final String phone;
     private final String password;
+    private final String role;
 
     public User() {
-        this(null, null, null, null, null);
+        this(null, null, null, null, null, null);
     }
 
-    public User(UUID id, String name, String email, String phone, String password) {
+    public User(UUID id, String name, String email, String phone, String password, String role) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.phone = phone;
         this.password = password;
+        this.role = role;
     }
 
     public UUID getId() {
@@ -39,5 +41,9 @@ public class User {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getRole() {
+        return role;
     }
 }

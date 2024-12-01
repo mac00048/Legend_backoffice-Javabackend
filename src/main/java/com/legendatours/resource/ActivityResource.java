@@ -25,6 +25,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.jdbi.v3.core.Jdbi;
+
 import com.codahale.metrics.annotation.Timed;
 import com.legendatours.beans.Activity;
 import com.legendatours.beans.File;
@@ -33,8 +35,6 @@ import com.legendatours.beans.User;
 import com.legendatours.dao.ActivityDao;
 import com.legendatours.dao.FileDao;
 import com.legendatours.dao.UserDao;
-
-import org.jdbi.v3.core.Jdbi;
 
 import io.dropwizard.jersey.sessions.Session;
 
@@ -66,7 +66,7 @@ public class ActivityResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response list(
             @QueryParam("q")       @DefaultValue("")      final String query,
-            @QueryParam("orderBy") @DefaultValue("title") final String orderBy,
+            @QueryParam("orderBy") @DefaultValue("name") final String orderBy,
             @QueryParam("order")   @DefaultValue("ASC")   final String order) {
         final List<Activity> activities = jdbi.onDemand(ActivityDao.class).list(query, orderBy, order);
         return Response.ok(wrapMeta(activities)).build();
