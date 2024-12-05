@@ -70,19 +70,28 @@ class Header extends Component {
           {this.props.user && (
             <div id="navbarBasicExample" className={"navbar-menu" + menuToggle}>
               <div className="navbar-end">
-                {this.data.items.map((item) => (
-                  <NavLink
-                    key={item.href}
-                    to={item.href}
-                    onClick={this.onMenuEntryClick}
-                    className={
-                      "navbar-item " +
-                      (location === item.href ? " is-active" : "")
-                    }
-                  >
-                    {item.title}
-                  </NavLink>
-                ))}
+                {this.data.items.map((item) => {
+                  // Only show the "Users" item if the user role is Admin
+                  if (
+                    item.title === "Users" &&
+                    this.props.user.role !== "Admin"
+                  ) {
+                    return null;
+                  }
+                  return (
+                    <NavLink
+                      key={item.href}
+                      to={item.href}
+                      onClick={this.onMenuEntryClick}
+                      className={
+                        "navbar-item " +
+                        (location === item.href ? " is-active" : "")
+                      }
+                    >
+                      {item.title}
+                    </NavLink>
+                  );
+                })}
 
                 <div
                   className="navbar-item has-dropdown is-hoverable"
