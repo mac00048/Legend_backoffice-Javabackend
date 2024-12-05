@@ -23,6 +23,7 @@ CREATE TABLE "activity" (
   "subtitle"    VARCHAR,
   "description" VARCHAR,
   "images"      JSONB,
+  "documents"   JSONB, 
   "created_at"  TIMESTAMP,
   "created_by"  UUID,
   "updated_at"  TIMESTAMP,

@@ -2,17 +2,17 @@ package com.legendatours.dao;
 
 import java.util.UUID;
 
-import com.legendatours.beans.File;
-
 import org.jdbi.v3.sqlobject.config.RegisterFieldMapper;
 import org.jdbi.v3.sqlobject.customizer.Bind;
 import org.jdbi.v3.sqlobject.customizer.BindBean;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
 import org.jdbi.v3.sqlobject.statement.SqlUpdate;
 
+import com.legendatours.beans.File;
+
 public interface FileDao {
 
-    @SqlQuery("SELECT * FROM file WHERE id=:id LIMIT 1")
+    @SqlQuery("SELECT * FROM file WHERE id = CAST(:id AS UUID) LIMIT 1")
     @RegisterFieldMapper(File.class)
     File get(@Bind("id") UUID id);
 

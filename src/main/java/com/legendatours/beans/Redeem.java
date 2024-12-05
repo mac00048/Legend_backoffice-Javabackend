@@ -20,6 +20,7 @@ public class Redeem extends Activity {
             activity.getSubtitle(),
             activity.getDescription(),
             activity.getImages(),
+            activity.getDocuments(),
             activity.getCreatedAt(),
             activity.getCreatedBy(),
             activity.getUpdatedAt(),

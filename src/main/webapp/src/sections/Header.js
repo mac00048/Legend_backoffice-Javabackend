@@ -71,7 +71,6 @@ class Header extends Component {
             <div id="navbarBasicExample" className={"navbar-menu" + menuToggle}>
               <div className="navbar-end">
                 {this.data.items.map((item) => {
-                  // Only show the "Users" item if the user role is Admin
                   if (
                     item.title === "Users" &&
                     this.props.user.role !== "Admin"
