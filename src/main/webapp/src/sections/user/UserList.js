@@ -43,20 +43,18 @@ class UserList extends Component {
       return;
     }
 
-    // Proceed with deletion
     user
       .remove(id)
       .then(() => {
-        // Refresh data after deletion
         this.setState({
-          selectedForDelete: null, // Reset delete confirmation
-          data: this.state.data.filter((item) => item.id !== id), // Remove deleted item from list
+          selectedForDelete: null, 
+          data: this.state.data.filter((item) => item.id !== id), 
         });
       })
       .catch((error) => {
         console.error("Error deleting user:", error);
         this.setState({
-          selectedForDelete: null, // Reset delete confirmation
+          selectedForDelete: null, 
           error: true,
         });
       });

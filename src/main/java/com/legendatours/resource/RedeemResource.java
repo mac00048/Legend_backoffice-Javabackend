@@ -61,21 +61,18 @@ public class RedeemResource {
             return Response.status(Status.NOT_FOUND).build();
         }
 
-        // voucher already used
         if (voucher.getRedeemDate() != null) {
             return Response.status(Status.NOT_FOUND).build();
         }
 
         int dayCount = jdbi.onDemand(ActivityDayDao.class).countByActivity(voucher.getActivityId());
 
-        // all vouchers are valid for at least one day
         if (dayCount <= 0) {
             dayCount = 1;
         }
 
         final LocalDateTime expirationDate = voucher.getStartDate().atStartOfDay().plusDays(dayCount).minusSeconds(1);
 
-        // if voucher already expired
         if (LocalDateTime.now().isAfter(expirationDate)) {
             return Response.status(Status.NOT_FOUND).build();
         }
@@ -128,13 +125,11 @@ public class RedeemResource {
         final Redeem redeem = new Redeem(activity, days, startDate, expirationDate);
 
         try (final ZipOutputStream zos = new ZipOutputStream(baos)) {
-            // add index json
             final ZipEntry index = new ZipEntry("index.json"); 
             zos.putNextEntry(index);
             zos.write(mapper.writeValueAsBytes(redeem));
             zos.closeEntry();
 
-            // create image directory
             final ZipEntry imagesDirectory = new ZipEntry("images/"); 
             zos.putNextEntry(imagesDirectory);
             zos.closeEntry();
@@ -160,7 +155,6 @@ public class RedeemResource {
             return;
         }
 
-        // create image
         final ZipEntry entry = new ZipEntry("images/" + file.getId() + (image.getType() != null ? image.getType() : ""));
         zos.putNextEntry(entry);
         zos.write(file.getContent());

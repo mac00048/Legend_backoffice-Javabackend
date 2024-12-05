@@ -13,7 +13,6 @@ class Header extends Component {
 
     this.data = {
       items: [
-        // { href: "/", title: "Home" },
         { href: "/activity", title: "Activities" },
         { href: "/voucher", title: "Vouchers" },
         { href: "/user", title: "Users" },

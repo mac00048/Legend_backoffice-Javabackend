@@ -33,22 +33,18 @@ export const activity = {
 export const user = {
   endpoint: "/api/user",
 
-  // Fetch all users
   list: (queryParams, config, defaultValue) =>
     get(user.endpoint, queryParams, config, defaultValue)
       .then(authorize)
       .then(verify)
       .then(parseJson),
 
-  // Fetch a user by ID
   get: (id) =>
     get(`${user.endpoint}/${id}`).then(authorize).then(verify).then(parseJson),
 
-  // Add a new user
   add: (data) =>
     post(user.endpoint, data).then(authorize).then(verify).then(parseJson),
 
-  // Update an existing user
   edit: (id, data) => {
     if (!id) throw new Error("User ID is required for editing");
     console.log("aaaaasd");
@@ -58,7 +54,6 @@ export const user = {
       .then(verify)
       .then(parseJson);
   },
-  // Delete a user
   remove: (id) => deleTe(`${user.endpoint}/${id}`).then(authorize).then(verify),
 };
 
@@ -191,7 +186,6 @@ const deleTe = (url) => {
 const authorize = (response) => {
   if (!response.ok && response.status === 401) {
     history.push("/login");
-    // TODO abort
   } else {
     return response;
   }
@@ -199,7 +193,6 @@ const authorize = (response) => {
 
 const verify = (response) => {
   if (!response.ok) {
-    // TODO display error
     throw Error(response.statusText);
   }
   return response;

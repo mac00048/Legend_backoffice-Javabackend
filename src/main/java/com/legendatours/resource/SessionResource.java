@@ -57,12 +57,10 @@ public class SessionResource {
     public Response login(final Login login, @Session HttpSession session) {
         final User user = jdbi.onDemand(UserDao.class).getByEmail(login.getEmail());
         
-        // username not found
         if (user == null) {
             return Response.status(Status.UNAUTHORIZED).build();
         }
 
-        // passwords do not match
         if (!BCrypt.checkpw(login.getPassword(), user.getPassword())) {
             return Response.status(Status.UNAUTHORIZED).build();
         }
