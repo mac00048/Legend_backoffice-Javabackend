@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { activity } from "../../lib/api";
 import ImageEditor from "../common/ImageEditor";
-import FileUpload from "../common/FileUpload"; // Use the FileUpload component
+import FileUpload from "../common/FileUpload";
 import RichEditor from "../common/RichEditor";
 import NavigationBlocker from "../common/NavigationBlocker";
 
@@ -15,7 +15,7 @@ class ActivityAdd extends Component {
         subtitle: "",
         description: "",
         images: [],
-        documents: [], // Added for document uploads
+        documents: [],
       },
       blocking: true,
       error: false,

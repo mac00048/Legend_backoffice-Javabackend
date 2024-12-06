@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { FaPencilAlt, FaTimes, FaClone } from "react-icons/fa";
 import ImageList from "../common/ImageList";
+import PDFList from "../common/PDFList"; // Import the PDFList component
 import ActivityDayList from "./day/ActivityDayList";
 import { activity, activityDay } from "../../lib/api";
-import { display, displayText } from "../../lib/helpers";
+import { display } from "../../lib/helpers";
 import ActivityLog from "../common/ActivityLog";
 import RichContent from "../common/RichContent";
-import { convertDistance } from "@turf/helpers";
 
 class ActivityDetails extends Component {
   constructor(props) {
@@ -78,7 +78,6 @@ class ActivityDetails extends Component {
                   id: undefined,
                   activityId: newActivity.id,
                 };
-                console.log(clonedDay);
                 return activityDay.add(newActivity.id, clonedDay);
               });
             });
@@ -144,18 +143,15 @@ class ActivityDetails extends Component {
           <div className="content">
             <span className="is-size-4">Title</span>
             {display(this.state.data.title)}
-
             <span className="is-size-4">Subtitle</span>
             {display(this.state.data.subtitle)}
-
             <span className="is-size-4">Description</span>
             <RichContent value={this.state.data.description} />
-
             <span className="is-size-4">Images</span>
             <ImageList images={this.state.data.images} />
-
+            <span className="is-size-4">Documents</span>
+            <PDFList documents={this.state.data.documents} />{" "}
             <ActivityDayList activityId={this.state.data.id} />
-
             <span className="is-size-4">Activity Log</span>
             <ActivityLog data={this.state.data} />
           </div>

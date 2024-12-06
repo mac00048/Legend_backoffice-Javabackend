@@ -187,22 +187,35 @@ public class ActivityResource {
                 createdBy);
     }
 
-    private Activity wrapUpdate(final Activity activity, final Activity update, final HttpSession session) {
+    private Activity wrapUpdate(final Activity oldActivity, final Activity update, final HttpSession session) {
         final OffsetDateTime updatedAt = OffsetDateTime.now();
         final UUID updatedBy = (UUID) session.getAttribute("user");
-
+    
+        // Merge images
+        final List<Image> images = update.getImages() != null && !update.getImages().isEmpty()
+                ? update.getImages()
+                : oldActivity.getImages();
+    
+        // Merge documents
+        final List<Document> documents = update.getDocuments() != null && !update.getDocuments().isEmpty()
+                ? update.getDocuments()
+                : oldActivity.getDocuments();
+    
+        // Create a new Activity instance with merged data
         return new Activity(
-                activity.getId(),
-                update.getTitle(),
-                update.getSubtitle(),
-                update.getDescription(),
-                update.getImages(),
-                update.getDocuments(),
-                activity.getCreatedAt(),
-                activity.getCreatedBy(),
+                oldActivity.getId(),
+                update.getTitle() != null ? update.getTitle() : oldActivity.getTitle(),
+                update.getSubtitle() != null ? update.getSubtitle() : oldActivity.getSubtitle(),
+                update.getDescription() != null ? update.getDescription() : oldActivity.getDescription(),
+                images,
+                documents,
+                oldActivity.getCreatedAt(),
+                oldActivity.getCreatedBy(),
                 updatedAt,
-                updatedBy);
+                updatedBy
+        );
     }
+    
 
     private Activity wrapDeleted(final Activity activity, final HttpSession session) {
         final OffsetDateTime deletedAt = OffsetDateTime.now();
