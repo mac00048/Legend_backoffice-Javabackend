@@ -20,7 +20,6 @@ class ActivityEdit extends Component {
     this.onChange = this.onChange.bind(this);
     this.onFormChange = this.onFormChange.bind(this);
     this.onFormSubmit = this.onFormSubmit.bind(this);
-    this.onDocumentUpload = this.onDocumentUpload.bind(this);
   }
 
   componentDidMount() {
@@ -33,12 +32,14 @@ class ActivityEdit extends Component {
             title: json.title,
             subtitle: json.subtitle,
             description: json.description,
-            images: json.images.map((image) => {
-              return { fileId: image.fileId, title: image.title };
-            }),
-            documents: json.documents.map((doc) => {
-              return { fileId: doc.fileId, name: doc.name };
-            }),
+            images: json.images.map((image) => ({
+              fileId: image.fileId,
+              title: image.title,
+            })),
+            documents: json.documents.map((doc) => ({
+              fileId: doc.fileId,
+              name: doc.name,
+            })),
           },
           init: true,
         })
@@ -51,45 +52,38 @@ class ActivityEdit extends Component {
   }
 
   onChange(name, value) {
-    this.setState((prevState) => {
-      return {
-        form: {
-          ...prevState.form,
-          [name]: value,
-        },
-        error: false,
-      };
-    });
+    this.setState((prevState) => ({
+      form: {
+        ...prevState.form,
+        [name]: value,
+      },
+      error: false,
+    }));
   }
 
   onFormChange(event) {
-    const name = event.target.name;
-    const value = event.target.value;
+    const { name, value } = event.target;
     this.onChange(name, value);
   }
 
   onImagesChange(images) {
-    this.setState((prevState) => {
-      return {
-        form: {
-          ...prevState.form,
-          images: images,
-        },
-        error: false,
-      };
-    });
+    this.setState((prevState) => ({
+      form: {
+        ...prevState.form,
+        images,
+      },
+      error: false,
+    }));
   }
 
-  onDocumentUpload(file) {
-    this.setState((prevState) => {
-      return {
-        form: {
-          ...prevState.form,
-          documents: [...prevState.form.documents, file],
-        },
-        error: false,
-      };
-    });
+  onDocumentsChange(documents) {
+    this.setState((prevState) => ({
+      form: {
+        ...prevState.form,
+        documents,
+      },
+      error: false,
+    }));
   }
 
   onFormSubmit(event) {
@@ -167,13 +161,9 @@ class ActivityEdit extends Component {
               <label className="label">Documents</label>
               <div className="control">
                 <FileUpload
+                  files={this.state.form.documents}
                   accept=".pdf,.doc,.docx"
-                  onChange={(file) =>
-                    this.onDocumentUpload({
-                      fileId: file.id,
-                      name: file.name,
-                    })
-                  }
+                  onChange={(documents) => this.onDocumentsChange(documents)}
                 />
               </div>
               {this.state.form.documents.length > 0 && (
@@ -181,7 +171,7 @@ class ActivityEdit extends Component {
                   <p>Uploaded Documents:</p>
                   <ul>
                     {this.state.form.documents.map((doc, index) => (
-                      <li key={index}>{doc.name}</li>
+                      <li key={index}>{doc.name || `Document ${index + 1}`}</li>
                     ))}
                   </ul>
                 </div>

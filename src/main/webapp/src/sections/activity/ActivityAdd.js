@@ -24,24 +24,20 @@ class ActivityAdd extends Component {
     this.onChange = this.onChange.bind(this);
     this.onFormChange = this.onFormChange.bind(this);
     this.onFormSubmit = this.onFormSubmit.bind(this);
-    this.onDocumentUpload = this.onDocumentUpload.bind(this);
   }
 
   onChange(name, value) {
-    this.setState((prevState) => {
-      return {
-        form: {
-          ...prevState.form,
-          [name]: value,
-        },
-        error: false,
-      };
-    });
+    this.setState((prevState) => ({
+      form: {
+        ...prevState.form,
+        [name]: value,
+      },
+      error: false,
+    }));
   }
 
   onFormChange(event) {
-    const name = event.target.name;
-    const value = event.target.value;
+    const { name, value } = event.target;
     this.onChange(name, value);
   }
 
@@ -64,15 +60,6 @@ class ActivityAdd extends Component {
           error: true,
         });
       });
-  }
-
-  onDocumentUpload(file) {
-    this.setState((prevState) => ({
-      form: {
-        ...prevState.form,
-        documents: [...prevState.form.documents, file], // Append uploaded file to documents array
-      },
-    }));
   }
 
   render() {
@@ -129,20 +116,25 @@ class ActivityAdd extends Component {
               <label className="label">Upload Documents (PDF/DOC)</label>
               <div className="control">
                 <FileUpload
+                  files={this.state.form.documents}
                   accept=".pdf,.doc,.docx"
-                  onChange={this.onDocumentUpload}
+                  onChange={(documents) =>
+                    this.onChange("documents", documents)
+                  }
                 />
               </div>
-              {this.state.form.documents.length > 0 && (
+              {/* {this.state.form.documents.length > 0 && (
                 <div className="uploaded-files">
                   <p>Uploaded Documents:</p>
                   <ul>
                     {this.state.form.documents.map((file, index) => (
-                      <li key={index}>{file.name}</li>
+                      <li key={index}>
+                        {file.name || `Document ${index + 1}`}
+                      </li>
                     ))}
                   </ul>
                 </div>
-              )}
+              )} */}
             </div>
             <div className="field is-grouped">
               <div className="control">
