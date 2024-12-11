@@ -68,7 +68,7 @@ public class ActivityResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response list(
             @QueryParam("q") @DefaultValue("") final String query,
-            @QueryParam("orderBy") @DefaultValue("name") final String orderBy,
+            @QueryParam("orderBy") @DefaultValue("title") final String orderBy,
             @QueryParam("order") @DefaultValue("ASC") final String order) {
         final List<Activity> activities = jdbi.onDemand(ActivityDao.class).list(query, orderBy, order);
         return Response.ok(wrapMeta(activities)).build();

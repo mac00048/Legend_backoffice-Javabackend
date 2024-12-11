@@ -16,22 +16,21 @@ public interface UserDao {
 
     @SqlQuery(
         "SELECT * FROM \"user\" " +
-        "WHERE deleted_at IS NULL " +
-        "AND (name ILIKE '%' || :query || '%' OR " +
-        "     email ILIKE '%' || :query || '%' OR " +
-        "     phone ILIKE '%' || :query || '%') " +
+        "WHERE (name ILIKE '%' || :query || '%' OR " +
+        "       email ILIKE '%' || :query || '%' OR " +
+        "       phone ILIKE '%' || :query || '%') " +
         "ORDER BY <orderBy> <order>"
     )
     @RegisterFieldMapper(User.class)
     List<User> list(@Bind("query") String query, @Define("orderBy") String orderBy, @Define("order") String order);
-    
+
     @SqlQuery("SELECT id, name, email, phone, password, role FROM \"user\" WHERE id = :id LIMIT 1")
     @RegisterFieldMapper(User.class)
     User get(@Bind("id") UUID id);
 
     @SqlQuery("SELECT id, name, email, phone, password, role FROM \"user\" WHERE name = :name LIMIT 1")
     @RegisterFieldMapper(User.class)
-    User getName(@Bind("name") UUID id);
+    User getName(@Bind("name") String name);
 
     @SqlQuery("SELECT id, name, email, phone, password, role FROM \"user\" WHERE email = :email LIMIT 1")
     @RegisterFieldMapper(User.class)
@@ -49,5 +48,4 @@ public interface UserDao {
     @SqlUpdate("DELETE FROM \"user\" WHERE id = :id")
     void delete(@Bind("id") UUID id);
 
-    
 }
