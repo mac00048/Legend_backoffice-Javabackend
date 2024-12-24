@@ -1,10 +1,10 @@
 server:
   applicationConnectors:
     - type: http
-      port: 8081
+      port: 8082
   adminConnectors:
     - type: http
-      port: 8082
+      port: 8083
 
 logging:
   level: INFO
@@ -14,7 +14,7 @@ logging:
 database:
   driverClass: org.postgresql.Driver
   user: postgres
-  password: postgres
+  password: qweqweQWE123!
   url: jdbc:postgresql://localhost/backoffice
   properties:
     charSet: UTF-8

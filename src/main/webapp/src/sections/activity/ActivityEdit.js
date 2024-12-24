@@ -38,7 +38,7 @@ class ActivityEdit extends Component {
             })),
             documents: json.documents.map((doc) => ({
               fileId: doc.fileId,
-              name: doc.name,
+              name: doc.title,
             })),
           },
           init: true,
@@ -107,7 +107,7 @@ class ActivityEdit extends Component {
     if (!this.state.init) {
       return null;
     }
-
+    console.log("Documents:", this.state.form.documents); // Log the documents object
     return (
       <section className="section">
         <div className="container">
@@ -166,16 +166,6 @@ class ActivityEdit extends Component {
                   onChange={(documents) => this.onDocumentsChange(documents)}
                 />
               </div>
-              {this.state.form.documents.length > 0 && (
-                <div className="uploaded-files">
-                  <p>Uploaded Documents:</p>
-                  <ul>
-                    {this.state.form.documents.map((doc, index) => (
-                      <li key={index}>{doc.name || `Document ${index + 1}`}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
             </div>
             <div className="field is-grouped">
               <div className="control">
