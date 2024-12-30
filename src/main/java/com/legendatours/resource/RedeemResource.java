@@ -25,6 +25,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.legendatours.beans.Activity;
 import com.legendatours.beans.ActivityDay;
+import com.legendatours.beans.Document;
 import com.legendatours.beans.File;
 import com.legendatours.beans.Image;
 import com.legendatours.beans.Redeem;
@@ -71,7 +72,7 @@ public class RedeemResource {
             dayCount = 1;
         }
 
-        final LocalDateTime expirationDate = voucher.getStartDate().atStartOfDay().plusDays(dayCount).minusSeconds(1);
+        final LocalDateTime expirationDate = voucher.getStartDate().atStartOfDay().plusDays(15).minusSeconds(1);
 
         if (LocalDateTime.now().isAfter(expirationDate)) {
             return Response.status(Status.NOT_FOUND).build();
@@ -143,6 +144,15 @@ public class RedeemResource {
                     writeImage(image, zos);
                 }
             }
+
+            final ZipEntry documentsDirectory = new ZipEntry("documents/");
+            zos.putNextEntry(documentsDirectory);
+            zos.closeEntry();
+
+            // Add documents
+            for (final Document document : activity.getDocuments()) { 
+                writeDocument(document, zos);
+            }
         }
 
         return baos.toByteArray();
@@ -160,4 +170,19 @@ public class RedeemResource {
         zos.write(file.getContent());
         zos.closeEntry();
     }
+
+    private void writeDocument(final Document document, final ZipOutputStream zos) throws IOException {
+        final File file = jdbi.onDemand(FileDao.class).get(document.getFileId());
+
+        if (file == null) {
+            return; // Skip if the file is not found
+        }
+
+        // Ensure the file naming logic matches the images logic
+        final ZipEntry entry = new ZipEntry("documents/" + file.getId() + ".pdf");
+        zos.putNextEntry(entry);
+        zos.write(file.getContent());
+        zos.closeEntry();
+    }
+
 }

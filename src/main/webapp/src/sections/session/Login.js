@@ -40,8 +40,7 @@ class Login extends Component {
         });
     }
 
-    onFormSu
-    bmit(event) {
+    onFormSubmit(event) {
         event.preventDefault();
 
         session.login(this.state.form)
